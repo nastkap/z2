@@ -1,0 +1,86 @@
+name: Docker CI with Docker Scout
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+    - 'v*'
+
+jobs:
+  ci_step:
+    name: Build, tag and push Docker image to GitHub Container Registry with CVE test
+    runs-on: ubuntu-latest
+      
+    steps:
+      # Checkout repozytorium
+      - name: Check out the source_repo
+        uses: actions/checkout@v4
+      
+      #  Definicja metadanych Docker
+      - name: Docker metadata definitions
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}/z2-spr
+          flavor: latest=false
+          tags: |
+            type=sha,priority=100,prefix=sha-,format=short
+            type=semver,priority=200,pattern={{version}}   
+
+      # Ustawienie QEMU
+      - name: QEMU set-up
+        uses: docker/setup-qemu-action@v3
+
+      #  Ustawienie Buildx
+      - name: Buildx set-up
+        uses: docker/setup-buildx-action@v3
+
+      #  Logowanie do GitHub Container Registry
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Budowanie i przesyłanie obrazu Docker
+      - name: Build and push Docker image
+        id: build-and-push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: ${{ steps.docker-scout-cves.outputs.no-critical-or-high }}
+          cache-from: |
+            type=registry,ref=ghcr.io/${{ github.repository }}/z2-spr:cache 
+          cache-to: |
+            type=registry,ref=ghcr.io/${{ github.repository }}/z2-spr:cache  
+
+      # Porównanie obrazów z produkcyjnym
+      - name: Docker Scout - Compare with production
+        id: docker-scout
+        uses: docker/scout-action@v1
+        with:
+          command: compare
+          image: ghcr.io/${{ github.repository }}/z2-spr:${{ steps.meta.outputs.tags }}
+          to-env: production
+          ignore-unchanged: true
+          only-severities: critical,high
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Analiza CVE obrazu
+      - name: Docker Scout - CVE Analysis
+        id: docker-scout-cves
+        uses: docker/scout-action@v1
+        with:
+          command: cves
+          image: ghcr.io/${{ github.repository }}/z2-spr:${{ steps.meta.outputs.tags }}
+          sarif-file: sarif.output.json
+          summary: true
+
+      # Przesłanie wyników analizy CVE
+      - name: Upload SARIF result
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: sarif.output.json

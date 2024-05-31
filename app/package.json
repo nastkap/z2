@@ -1,0 +1,15 @@
+{
+  "name": "cloud-computing-server",
+  "version": "1.0.0",
+  "description": "Prosty serwer Node.js dla laboratorium",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Anastasiia Pryimachuk",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "moment-timezone": "^0.5.31"
+  }
+}
