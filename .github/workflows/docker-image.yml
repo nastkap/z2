@@ -1,9 +1,12 @@
 name: GHAction example
 
+
 on:
+  workflow_dispatch: # Dodaj ten wyzwalacz
   push:
     tags:
       - 'v*'
+
 
 jobs:
   build-and-scan:
@@ -89,6 +92,4 @@ jobs:
             type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/example:cache
           tags: ${{ steps.meta.outputs.tags }}
 
-            type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/example:cache
-          tags: ${{ steps.meta.outputs.tags }}
-
+            
