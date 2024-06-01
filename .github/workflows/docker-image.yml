@@ -56,7 +56,7 @@ jobs:
         uses: docker/scout-action@v1
         with:
           command: cves
-          image: ${{ vars.DOCKERHUB_USERNAME }}/example:${{ steps.meta.outputs.tags }}
+          image: ${{ steps.meta.outputs.tags }}
           sarif-file: sarif.output.json
           summary: true
 
