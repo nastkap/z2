@@ -1,7 +1,7 @@
 Zadanie polega na rozszerzeniu przykładu łańcucha CI dla usługi GitHub Actions o testowanie obrazu Docker pod kątem podatności na zagrożenia przy użyciu usługi Docker Scout. Test ten ma na celu zapewnienie, że obraz zostanie przesłany do publicznego repozytorium obrazów na GitHub (ghcr.io) tylko wtedy, gdy nie zawiera zagrożeń sklasyfikowanych jako krytyczne lub wysokie.
 
 
-Workflow jest skonfigurowany w pliku `.github/workflows/docker-image.yml`. Obejmuje on następujące kroki:
+Workflow jest skonfigurowany w pliku ".github/workflows/docker-image.yml". Obejmuje on następujące kroki:
 
 1. "checkout out the source_repo": skopiowanie zawartości repozytorium do maszyny wirtualnej hosta.
 2. "Docker metadata definitions": definiowanie metadanych obrazu Docker, w tym sposobu tagowania obrazu na podstawie typu wydania.
