@@ -48,7 +48,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          password: ${{ secrets.GHCR_PAT }}
 
       - name: Build Docker image
         id: build
@@ -101,3 +101,4 @@ jobs:
           cache-to: |
             type=registry,ref=ghcr.io/${{ github.repository }}/example:cache
           tags: ${{ steps.meta.outputs.tags }}
+
