@@ -47,6 +47,7 @@ jobs:
           context: .
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
+         #push: false
           push: true
           cache-from: |
             type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/example:cache 
