@@ -2,10 +2,10 @@ const express = require('express');
 const moment = require('moment-timezone');
 const os = require('os');
 
-// Twój pełne imię i nazwisko
+
 const studentName = 'Imię i Nazwisko Studenta';
 
-// Tworzenie aplikacji Express
+
 const app = express();
 const port = 3000;
 
