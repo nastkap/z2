@@ -65,6 +65,10 @@ jobs:
         with:
           command: cves
           image: ${{ vars.DOCKERHUB_USERNAME }}/example
+          flavor: latest=false
+          tags: |
+            type=sha,priority=100,prefix=sha-,format=short
+            type=semver,priority=200,pattern={{version}}
           sarif-file: sarif.output.json
           summary: true
       
