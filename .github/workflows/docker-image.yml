@@ -66,11 +66,12 @@ jobs:
       - name: Determine CVE Severity
         id: determine-cve-severity
         run: |
-              if grep -q 'critical\|high' sarif.output.json; then
-              echo "has_critical_or_high=true" >> $GITHUB_ENV
-              else
-              echo "has_critical_or_high=false" >> $GITHUB_ENV
-              fi
+           if grep -q 'critical\|high' sarif.output.json; then
+           echo "has_critical_or_high=true" >> $GITHUB_ENV
+           else
+           echo "has_critical_or_high=false" >> $GITHUB_ENV
+           fi
+
       - name: Push Docker image if no critical or high CVEs
         if: steps.determine-cve-severity.outputs.has_critical_or_high == 'false'
         run: docker push ghcr.io/nastkap/z2:${{ steps.meta.outputs.tags }}
