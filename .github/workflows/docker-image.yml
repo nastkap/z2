@@ -56,9 +56,9 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: false
           cache-from: |
-            type=registry,ref=ghcr.io/nastkap/z2:cache
+            type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/example:cache
           cache-to: |
-            type=registry,ref=ghcr.io/nastkap/z2:cache
+            type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/example:cache
           tags: ${{ steps.meta.outputs.tags }}
 
       - name: Analyze for critical and high CVEs
@@ -94,8 +94,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           cache-from: |
-            type=registry,ref=ghcr.io/nastkap/z2:cache
+            type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/example:cache
           cache-to: |
-            type=registry,ref=ghcr.io/nastkap/z2:cache
+            type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/example:cache
           tags: ${{ steps.meta.outputs.tags }}
-
