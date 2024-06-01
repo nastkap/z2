@@ -22,7 +22,7 @@ WORKDIR /app
 # Kopiowanie aplikacji z poprzedniego etapu
 COPY --from=build /app /app
 
-# Kopiowanie Node.js z obrazu node:14-alpine (wymagane biblioteki do uruchomienia Node.js)
+# Wymagane biblioteki do uruchomienia Node.js
 COPY --from=build /usr/local/bin/node /usr/local/bin/
 COPY --from=build /app/node_modules /app/node_modules
 
