@@ -67,4 +67,4 @@ jobs:
 
       - name: Push Docker image if no critical or high CVEs
         if: steps.determine-cve-severity.outputs.has_critical_or_high == 'false'
-        run: docker push nastkap
+        run: docker push ${{ steps.meta.outputs.tags }}
