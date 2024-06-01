@@ -2,7 +2,7 @@ name: GHAction example
 
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch: # Dodaj ten wyzwalacz
   push:
     tags:
       - 'v*'
@@ -21,7 +21,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ secrets.DOCKERHUB_USERNAME }}/example
+          images: ${{ vars.DOCKERHUB_USERNAME }}/example
           flavor: latest=false
           tags: |
             type=sha,priority=100,prefix=sha-,format=short
@@ -36,7 +36,8 @@ jobs:
       - name: Login to GHCR
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
+
+          username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.GHCR_PAT }}
 
       - name: Build Docker image
@@ -48,9 +49,9 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: false
           cache-from: |
-            type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/example:cache
+            type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/example:cache
           cache-to: |
-            type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/example:cache
+            type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/example:cache
           tags: ${{ steps.meta.outputs.tags }}
 
       - name: Analyze for critical and high CVEs
@@ -58,7 +59,7 @@ jobs:
         uses: docker/scout-action@v1
         with:
           command: cves
-          image: ${{ secrets.DOCKERHUB_USERNAME }}/example
+          image: ${{ vars.DOCKERHUB_USERNAME }}/example
           sarif-file: sarif.output.json
           summary: true
       
@@ -86,7 +87,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           cache-from: |
-            type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/example:cache
+            type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/example:cache
           cache-to: |
-            type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/example:cache
-          tags: ${{ steps.meta.outputs.tags }}      
+            type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/example:cache
+          tags: ${{ steps.meta.outputs.tags }}
