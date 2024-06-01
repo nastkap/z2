@@ -9,7 +9,7 @@ Workflow jest skonfigurowany w pliku ".github/workflows/docker-image.yml". Obejm
 4. "Buildx set-up": konfiguracja narzędzia Buildx do budowania obrazów wieloarchitekturalnych.
 5. "Login to GitHub Container Registry": uwierzytelnienie 
 6. "Build and push Docker image": budowanie obrazu Docker z pliku Dockerfile
-7. "Docker Scout - CVE Analysis": analiza podatności CVE w zbudowanym obrazie Docker.
-8. "Determine CVE Severity": sprawdzenie, czy w obrazie występują krytyczne lub wysokie podatności CVE.
+7. "Docker Scout - CVE Analysis": ten krok wykonuje analizę podatności obrazu Docker przy użyciu usługi Docker Scout. Wyniki analizy są zapisywane w pliku sarif.output.json.
+8. "Determine CVE Severity": ten krok sprawdza, czy plik sarif.output.json zawiera krytyczne lub wysokie zagrożenia. Jeśli tak, ustawiana jest zmienna środowiskowa $has_critical_or_high na true, w przeciwnym razie na false.
 9. "Push Docker image if no critical or high CVEs": ten krok używa warunku if, aby sprawdzić, czy obraz Docker nie zawiera krytycznych lub wysokich zagrożeń. Jeśli tak, obraz jest przesyłany do GitHub Container Registry
 
